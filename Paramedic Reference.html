@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paramedic Reference</title>
+<style>
+:root {
+  box-sizing: border-box;
+  --bg: #f5f7fa; --panel: #ffffff; --text: #1c2430; --muted: #5b6676;
+  --accent: #2d5f8b; --accent-soft: #e8eef5; --border: #d9dde3;
+  --warn: #8a4b00; --warn-soft: #fff4e5;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --panel: #1b2029; --text: #e6eaf2; --muted: #9aa4b5;
+    --accent: #7fb0d9; --accent-soft: #1f2d3b; --border: #2e333c;
+    --warn: #ffb36b; --warn-soft: #3a2a18;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --panel: #1b2029; --text: #e6eaf2; --muted: #9aa4b5;
+  --accent: #7fb0d9; --accent-soft: #1f2d3b; --border: #2e333c;
+  --warn: #ffb36b; --warn-soft: #3a2a18;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.55; }
+header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; }
+header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+header p { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; }
+main { max-width: 900px; margin: 0 auto; padding: 20px; padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+.disclaimer { background: var(--warn-soft); color: var(--warn); border: 1px solid var(--warn); border-radius: 6px; padding: 10px 14px; font-size: 0.88rem; margin-bottom: 18px; }
+#search { width: 100%; padding: 14px 16px; font-size: 1rem; border-radius: 6px; border: 1px solid var(--border); background: var(--panel); color: var(--text); }
+#search:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 18px; }
+.pill { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 7px 13px; border-radius: 6px; cursor: pointer; font-size: 0.86rem; font-family: inherit; }
+.pill[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px; margin-bottom: 14px; }
+.card h2 { margin: 4px 0 8px; font-size: 1.1rem; }
+.card ol { margin: 6px 0 0 20px; padding: 0; }
+.card li { margin-bottom: 6px; }
+.card p { margin: 6px 0; }
+.tag { font-size: 0.8rem; color: var(--muted); }
+.muted { color: var(--muted); font-size: 0.86rem; }
+.section-label { font-size: 0.9rem; font-weight: 600; color: var(--muted); margin: 22px 0 8px; }
+.related { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.topic-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); margin-bottom: 8px; }
+.topic-row button { border: none; background: none; color: var(--text); font: inherit; font-weight: 600; cursor: pointer; text-align: left; padding: 0; }
+.empty { text-align: center; color: var(--muted); padding: 24px 10px; }
+.hidden { display: none; }
+
+.guide-open { margin-bottom: 14px; }
+.guide { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 14px; }
+.guide h2 { margin: 0 0 6px; font-size: 1rem; }
+.guide .hint { color: var(--muted); font-size: 0.86rem; margin: 0 0 10px; }
+.guide .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.guide .opt { border: 1px solid var(--border); background: var(--bg); color: var(--text); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-family: inherit; }
+.guide .opt:hover { border-color: var(--accent); }
+.guide .back-link { background: none; border: none; color: var(--accent); cursor: pointer; font: inherit; padding: 0; margin-top: 10px; }
+.brandbar { display: flex; align-items: center; gap: 12px; }
+.brandbar .logo { width: 48px; height: 48px; flex-shrink: 0; }
+.brandbar h1, .brandbar p { margin: 0; }
+</style>
+</head>
+<body>
+<header class="brandbar">
+  <img class="logo" alt="Star of Life" src="data:image/png;base64,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">
+  <div><h1>Paramedic Reference</h1>
+  <p>Emergencies, injuries, assessment, procedures, equipment, terms, and documentation.</p></div>
+</header>
+
+<main>
+  <div class="disclaimer">For roleplay only. Follow your server's rules and staff.</div>
+
+  <input id="search" type="search" placeholder="Type what's happening..." autocomplete="off">
+
+  <div class="row" id="filters"></div>
+
+  <div class="row"><button class="pill guide-open" id="guide-open">Not sure how to describe it?</button></div>
+  <section id="guide" class="guide hidden"></section>
+
+  <section id="results"></section>
+  <section id="browse"></section>
+</main>
+
+<script>
+/* ============ DATABASE ============
+   Add an entry by copying one block.
+   cat: category, title: heading,
+   q: example questions (similar wording is matched automatically),
+   a: array of steps, or a plain string.
+*/
+const DB = [
+  // ================= EMERGENCIES =================
+  { cat: "Emergencies", title: "Cardiac arrest", q: ["patient not breathing", "no pulse", "unresponsive and not breathing", "heart stopped", "what to do cardiac arrest", "person collapsed no pulse", "code blue", "flatline on monitor"],
+    a: [
+      "Check the scene is safe, then check responsiveness and breathing for no more than about 10 seconds.",
+      "If there is no pulse or only gasping, start CPR immediately with hard, fast chest compressions.",
+      "Attach the AED or cardiac monitor as soon as it is available and follow its prompts.",
+      "Pause compressions only for rhythm checks and shocks, then resume straight away.",
+      "Manage the airway with a BVM or advanced airway, and give medications according to your protocol.",
+      "Look for reversible causes: bleeding, low oxygen, blocked airway, poisoning, or a tension pneumothorax.",
+      "Report the arrest and any changes over radio."
+    ] },
+
+  { cat: "Emergencies", title: "Chest pain or heart attack", q: ["chest pain", "heart attack", "chest pressure", "pain in chest going to arm", "stemi", "crushing chest pain", "patient says chest hurts", "chest tightness and sweating"],
+    a: [
+      "Ask OPQRST questions and take a full set of vitals.",
+      "Let the patient sit in a comfortable position and keep them calm.",
+      "Give oxygen only if SpO2 is low or the patient is distressed.",
+      "Attach the cardiac monitor and take a 12-lead ECG if your equipment allows.",
+      "Establish IV access and give medications according to your protocol.",
+      "Watch for rhythm changes, worsening pain, or shock.",
+      "Transport promptly to a hospital that treats heart attacks, and give the time symptoms started."
+    ] },
+
+  { cat: "Emergencies", title: "Stroke", q: ["stroke symptoms", "face drooping", "slurred speech", "one side weak", "be fast", "numb arm and face", "patient cant speak", "one side of face not moving"],
+    a: [
+      "Use BE FAST: Balance loss, Eyes (vision changes), Face drooping, Arm weakness, Speech difficulty, Time to act.",
+      "Note the exact time symptoms started, since treatment depends on it.",
+      "Check blood glucose, because low sugar can mimic a stroke.",
+      "Protect the airway and position the patient with the head slightly raised.",
+      "Transport to a stroke-capable hospital and give the onset time in your handoff."
+    ] },
+
+  { cat: "Emergencies", title: "Allergic reaction or anaphylaxis", q: ["allergic reaction", "anaphylaxis", "throat swelling", "hives and swelling", "bee sting reaction", "when to give epinephrine", "face swelling after eating", "allergy attack"],
+    a: [
+      "Check the airway first, since throat swelling can close it quickly.",
+      "Ask about likely triggers: food, medication, insect stings, latex.",
+      "Give epinephrine according to your protocol for breathing difficulty, face or throat swelling, or low blood pressure.",
+      "Give oxygen and monitor breathing, pulse, and blood pressure.",
+      "Transport even if symptoms improve, since they can return."
+    ] },
+
+  { cat: "Emergencies", title: "Asthma or breathing difficulty", q: ["asthma attack", "wheezing", "short of breath", "cant breathe well", "copd flare", "shortness of breath", "patient struggling to breathe", "inhaler not working"],
+    a: [
+      "Sit the patient upright and keep them calm, since panic makes breathing harder.",
+      "Ask whether they have an inhaler and whether it has helped.",
+      "Give oxygen and bronchodilators according to your protocol.",
+      "Monitor SpO2, respiratory rate, and whether they can speak in full sentences.",
+      "Watch for tiredness, confusion, or drowsiness, which mean the patient is tiring out.",
+      "Transport and report their response to treatment."
+    ] },
+
+  { cat: "Emergencies", title: "Low blood sugar", q: ["low blood sugar", "hypoglycemia", "patient confused and diabetic", "insulin reaction", "diabetic shaking and sweating", "sugar is low", "diabetic emergency"],
+    a: [
+      "Check blood glucose with a glucometer as soon as you can.",
+      "If the patient is awake and can swallow safely, give fast sugar according to your protocol, then recheck.",
+      "If the patient cannot swallow or is unresponsive, follow your protocol for IV glucose or glucagon.",
+      "Recheck glucose after treatment and report the results."
+    ] },
+
+  { cat: "Emergencies", title: "High blood sugar", q: ["high blood sugar", "hyperglycemia", "diabetic ketoacidosis", "dka", "very thirsty and peeing a lot", "fruity breath", "deep fast breathing diabetic"],
+    a: [
+      "Expect thirst, frequent urination, nausea, vomiting, weakness, and confusion.",
+      "Look for deep, rapid breathing and fruity-smelling breath, which can mean ketoacidosis.",
+      "Check blood glucose and vitals.",
+      "Give fluids according to your protocol and monitor closely.",
+      "Transport, since this condition can worsen quickly."
+    ] },
+
+  { cat: "Emergencies", title: "Seizure", q: ["seizure", "patient is fitting", "convulsing", "shaking uncontrollably", "epileptic", "seizure what to do", "person having a fit"],
+    a: [
+      "Protect the patient from injury by moving objects away and cushioning the head.",
+      "Do not restrain the patient or put anything in their mouth.",
+      "Time the seizure and note what it looked like.",
+      "After it stops, place the patient in the recovery position and check breathing.",
+      "Check blood glucose.",
+      "Transport if the seizure is long, repeats, or the patient does not return to normal."
+    ] },
+
+  { cat: "Emergencies", title: "Fainting (syncope)", q: ["fainted", "passed out", "blacked out", "dizzy and collapsed", "syncope", "patient fainted at work", "lightheaded and fell"],
+    a: [
+      "Look for the cause: heart rhythm, blood sugar, dehydration, pregnancy, and injuries from the fall.",
+      "Lay the patient flat and raise the legs if they are not injured.",
+      "Take vitals and watch for them fainting again.",
+      "Transport if there is chest pain, injury, shortness of breath, or no clear cause."
+    ] },
+
+  { cat: "Emergencies", title: "Overdose or poisoning", q: ["overdose", "poisoning", "took too many pills", "swallowed something toxic", "drug overdose", "ingested poison", "poisoned"],
+    a: [
+      "Check scene safety, then find out what was taken, how much, and when if possible.",
+      "Assess airway, breathing, and circulation first.",
+      "Support vital signs and give treatment according to your protocol.",
+      "Bring any containers or packaging to the hospital.",
+      "Follow your server's rules on roleplay drug content."
+    ] },
+
+  { cat: "Emergencies", title: "Heat stroke", q: ["heat stroke", "overheated", "heat exhaustion", "patient too hot", "very hot skin confused", "heat illness"],
+    a: [
+      "Move the patient to shade or a cool place.",
+      "Cool them quickly with cold packs or cool water according to protocol.",
+      "Heat stroke causes confusion or collapse. Treat as an emergency even if the patient seems to improve.",
+      "Give oxygen if needed, monitor vitals, and transport."
+    ] },
+
+  { cat: "Emergencies", title: "Hypothermia", q: ["hypothermia", "freezing patient", "frostbite", "patient too cold", "found in the snow", "cold exposure"],
+    a: [
+      "Move the patient to shelter and remove wet clothing.",
+      "Insulate with blankets and handle gently, since rough movement can trigger dangerous heart rhythms.",
+      "Check mental status, temperature, and vitals.",
+      "For frostbite, protect frozen areas from refreezing and do not rub them.",
+      "Transport if the patient is confused, unresponsive, or not improving."
+    ] },
+
+  { cat: "Emergencies", title: "Choking", q: ["choking", "cant breathe food stuck", "airway blocked by food", "foreign body in throat", "choking adult", "choking baby", "heimlich"],
+    a: [
+      "Ask if they can speak or cough. If they can, encourage coughing.",
+      "If they cannot cough, speak, or breathe, give back blows and abdominal thrusts according to your protocol.",
+      "If they become unresponsive, start CPR and check the mouth for an object before each set of breaths.",
+      "Transport after the airway is clear, since complications can follow."
+    ] },
+
+  { cat: "Emergencies", title: "Drowning", q: ["drowning", "pulled from water", "near drowning", "person in pool not breathing", "water in lungs"],
+    a: [
+      "Make sure the scene is safe for rescuers before entering the water.",
+      "Remove the patient from the water carefully, keeping the neck protected if a diving injury is possible.",
+      "Start rescue breaths or CPR, since breathing problems are the main danger.",
+      "Give oxygen and monitor. Transport even if the patient seems recovered, because they can deteriorate later."
+    ] },
+
+  { cat: "Emergencies", title: "Abdominal pain", q: ["stomach pain", "abdominal pain", "belly hurts", "appendicitis", "vomiting blood", "stomach cramps", "pain in belly"],
+    a: [
+      "Use OPQRST and ask about nausea, vomiting, bowel movements, and last meal.",
+      "Check for guarding or rigidity, and look for blood in vomit or stool.",
+      "Take vitals. Check glucose if the patient is confused or diabetic.",
+      "Keep the patient comfortable and avoid giving food or drink.",
+      "Transport, and report the location and character of the pain."
+    ] },
+
+  { cat: "Emergencies", title: "Sepsis (severe infection)", q: ["sepsis", "infection spreading", "fever and confused", "high fever and fast heart rate", "patient very sick with infection"],
+    a: [
+      "Look for fever or low temperature, a fast heart rate, fast breathing, and confusion.",
+      "Ask about recent infection, wounds, or illness.",
+      "Give oxygen if needed, support blood pressure, and follow your protocol for IV fluids.",
+      "Transport quickly, since sepsis can worsen fast."
+    ] },
+
+  { cat: "Emergencies", title: "Pregnancy and childbirth", q: ["pregnant", "childbirth", "labour", "baby is coming", "delivering baby", "bleeding while pregnant", "contractions"],
+    a: [
+      "Ask how far along the pregnancy is and how far apart the contractions are.",
+      "If the baby is coming, prepare for delivery: support the head and keep the baby warm.",
+      "Keep the mother positioned comfortably and monitor her vitals.",
+      "Bleeding during pregnancy is always an emergency. Treat for shock and transport.",
+      "After delivery, dry and warm the baby, check breathing, and transport both patients."
+    ] },
+
+  { cat: "Emergencies", title: "Unconscious, cause unknown", q: ["unconscious", "found unresponsive", "wont wake up", "passed out no reason", "unknown medical", "altered mental status"],
+    a: [
+      "Check airway, breathing, and circulation first.",
+      "Check blood glucose, since it is a common and easily missed cause.",
+      "Look for clues: medical alert bracelets, medication packaging, drugs or alcohol, and injuries.",
+      "Use GCS to track the patient, and place them in the recovery position if the airway is safe.",
+      "Transport and report what you found."
+    ] },
+
+  { cat: "Emergencies", title: "Behavioural or psychiatric emergency", q: ["person is agitated", "suicidal", "mental health crisis", "person threatening themselves", "psychiatric emergency", "person hearing voices"],
+    a: [
+      "Make sure the scene is safe for you and the patient. Ask for police support if there is a threat.",
+      "Speak calmly, keep your distance, and explain what you are doing.",
+      "Do not restrain unless you are trained and it is required by protocol.",
+      "Check for medical causes such as drugs, low blood sugar, or head injury.",
+      "Transport according to your server's rules for mental health calls."
+    ] },
+
+  { cat: "Emergencies", title: "Severe headache", q: ["worst headache", "bad headache", "headache and vomiting", "sudden headache", "headache with stiff neck"],
+    a: [
+      "Ask whether the headache came on suddenly and whether it is the worst they have had.",
+      "Check neurological signs: speech, vision, weakness, and GCS.",
+      "Check blood pressure and blood glucose.",
+      "Transport if the headache is sudden, severe, or comes with neurological changes."
+    ] },
+
+  // ================= INJURIES =================
+  { cat: "Injuries", title: "Severe bleeding", q: ["bleeding", "severe bleeding", "stab wound", "gunshot wound", "shot", "blood loss", "how to use tourniquet", "bleeding from leg", "cut artery", "hemorrhage", "stabbed"],
+    a: [
+      "Apply firm direct pressure with a dressing and keep pressing.",
+      "Use a pressure dressing or hemostatic gauze for deep wounds, and pack the wound if your protocol says so.",
+      "If bleeding continues on a limb, apply a tourniquet above the wound and tighten until the bleeding stops. Note the time.",
+      "Check for shock: pale or cool skin, fast pulse, low blood pressure, or confusion.",
+      "Keep the patient warm and transport quickly."
+    ] },
+
+  { cat: "Injuries", title: "Gunshot wound", q: ["gunshot", "shot in the chest", "shot in leg", "gsw", "bullet wound", "shot in stomach"],
+    a: [
+      "Make sure the scene is safe and law enforcement has cleared any threat.",
+      "Control bleeding first, using direct pressure, a tourniquet on limbs, or packing and pressure for a torso wound.",
+      "Check for an exit wound and for injuries you cannot see, such as internal bleeding.",
+      "Assess airway, breathing, and circulation, and treat for shock.",
+      "Transport quickly to a trauma hospital and report the mechanism and wound locations."
+    ] },
+
+  { cat: "Injuries", title: "Stab wound", q: ["stabbed", "stab wound", "knife wound", "impaled object", "stabbed in chest", "stabbed in stomach"],
+    a: [
+      "Check scene safety and leave an object in place if it is impaling a body part, unless it blocks the airway.",
+      "Stabilise the object with bulky dressings so it does not move.",
+      "Control bleeding around the wound, not directly on the object.",
+      "Watch for signs of internal injury and shock.",
+      "Transport quickly and report the object and wound location."
+    ] },
+
+  { cat: "Injuries", title: "Burns", q: ["burn", "burns", "fire burns", "scald", "chemical burn", "smoke inhalation", "hot liquid burn", "burnt skin"],
+    a: [
+      "Make sure the scene is safe and the burning has stopped.",
+      "Remove jewellery and loose clothing near the burn, but do not pull stuck clothing away.",
+      "Cool the burn with cool running water if appropriate, then cover with a dry sterile dressing.",
+      "Estimate the percentage of the body burned to help decide transport.",
+      "Watch for inhalation injury: soot around the mouth, hoarse voice, or singed hair. Give oxygen and transport."
+    ] },
+
+  { cat: "Injuries", title: "Fracture (broken bone)", q: ["broken bone", "fracture", "broken arm", "broken leg", "splint", "bone sticking out", "dislocated shoulder", "how to splint"],
+    a: [
+      "Check the pulse, sensation, and movement below the injury before splinting.",
+      "Immobilise the joint above and below the injury, and support the limb in the position you find it.",
+      "Recheck pulse, sensation, and movement after splinting.",
+      "For an open fracture, cover the wound with a sterile dressing and control bleeding without pushing the bone back in.",
+      "Transport and report the neurovascular status."
+    ] },
+
+  { cat: "Injuries", title: "Dislocation", q: ["dislocated", "joint popped out", "shoulder out of place", "dislocated finger", "joint out of socket"],
+    a: [
+      "Do not try to force the joint back in unless your protocol allows it.",
+      "Support the limb in the position it is found and check circulation, sensation, and movement below the joint.",
+      "Immobilise and apply cold packs if available.",
+      "Transport and report the joint and any neurovascular changes."
+    ] },
+
+  { cat: "Injuries", title: "Head injury", q: ["head injury", "hit head", "concussion", "unconscious after fall", "check gcs", "pupils uneven", "head trauma", "bleeding from head"],
+    a: [
+      "Check the GCS and pupils, and record them.",
+      "Protect the neck if the mechanism suggests spinal injury.",
+      "Keep the airway open, and suction or position the patient as needed.",
+      "Watch for worsening signs: falling GCS, repeated vomiting, unequal pupils, or seizures.",
+      "Transport and report GCS trends."
+    ] },
+
+  { cat: "Injuries", title: "Spinal or neck injury", q: ["neck injury", "spinal injury", "c-spine", "car crash neck pain", "cant feel legs", "back injury after crash", "spine immobilisation", "neck pain after fall"],
+    a: [
+      "Keep the head and neck in line and avoid moving the patient unless there is danger.",
+      "Apply a cervical collar and immobilise according to protocol.",
+      "Check movement and feeling in all four limbs and record the findings.",
+      "Transport on a spinal board or appropriate device, and report the findings."
+    ] },
+
+  { cat: "Injuries", title: "Chest trauma or collapsed lung", q: ["chest trauma", "collapsed lung", "pneumothorax", "tension pneumothorax", "stab to chest", "one side of chest not moving", "tracheal deviation", "chest injury breathing problem"],
+    a: [
+      "Listen to breath sounds on both sides of the chest.",
+      "Look for absent breath sounds on one side, a tracheal shift, or swollen neck veins.",
+      "If a tension pneumothorax is suspected, follow your protocol for decompression and report it immediately.",
+      "Apply a chest seal to open chest wounds according to protocol.",
+      "Give oxygen, assist breathing as needed, and transport immediately."
+    ] },
+
+  { cat: "Injuries", title: "Abdominal trauma", q: ["abdominal trauma", "stomach injury", "hit by car stomach", "internal bleeding", "belly injury", "pelvis injury"],
+    a: [
+      "Look for bruising, rigidity, swelling, or signs of shock.",
+      "Control external bleeding and keep the patient still.",
+      "Do not give food or drink. Protect against shock.",
+      "Transport quickly to a trauma centre, since internal bleeding may be hidden."
+    ] },
+
+  { cat: "Injuries", title: "Fall from height", q: ["fell from height", "fell off roof", "fell from ladder", "fall injury", "fall from balcony"],
+    a: [
+      "Consider the height and landing surface, since these predict injuries.",
+      "Assume spinal injury until ruled out and immobilise accordingly.",
+      "Look for head, chest, abdominal, and pelvic injuries.",
+      "Transport to a trauma centre and report the height of the fall."
+    ] },
+
+  { cat: "Injuries", title: "Road traffic crash", q: ["car crash", "road traffic accident", "crash with multiple cars", "hit by car", "motorcycle crash", "vehicle collision"],
+    a: [
+      "Check scene safety first, including traffic, fuel leaks, and fire risk.",
+      "Assess the number of patients and the mechanism, such as speed and impact.",
+      "Extricate only when the scene is safe, and immobilise the spine.",
+      "Treat life threats first: airway, breathing, bleeding, and shock.",
+      "Request extra units and report the number of patients to dispatch."
+    ] },
+
+  { cat: "Injuries", title: "Crush injury", q: ["crushed", "crush injury", "trapped under", "pinned under", "crushed leg", "crush syndrome"],
+    a: [
+      "Do not free a trapped patient until rescue teams are ready, since sudden release can cause shock.",
+      "Once free, check circulation and treat for shock.",
+      "Watch for dark urine or kidney problems, which can follow prolonged crush injury.",
+      "Transport promptly."
+    ] },
+
+  { cat: "Injuries", title: "Electrical injury", q: ["electrocuted", "electric shock", "electrical injury", "touched power line", "lightning strike"],
+    a: [
+      "Do not touch the patient until the power source is switched off or the scene is confirmed safe.",
+      "Check breathing and pulse. Electrical injury can stop the heart.",
+      "Look for entry and exit burns.",
+      "Transport, since internal damage can be present even if the patient seems fine."
+    ] },
+
+  { cat: "Injuries", title: "Eye injury", q: ["eye injury", "something in eye", "cut to eye", "chemical in eye", "eye hurts badly", "impaled object in eye"],
+    a: [
+      "Do not press on the eye or remove an object lodged in it.",
+      "Cover both eyes lightly with dressings to limit movement.",
+      "For chemicals, flush with clean water according to protocol.",
+      "Transport and report the mechanism."
+    ] },
+
+  { cat: "Injuries", title: "Dog or animal bite", q: ["dog bite", "animal bite", "bitten by", "cat bite", "snake bite", "bitten by snake"],
+    a: [
+      "Check the bite for bleeding and puncture wounds, and control bleeding with pressure.",
+      "Clean the area with clean water if possible and cover with a sterile dressing.",
+      "For snake bites, keep the limb still and at about heart level, and avoid tourniquets or cutting the wound unless protocol says so.",
+      "Monitor for allergic reaction or signs of spreading poison. Transport."
+    ] },
+
+  { cat: "Injuries", title: "Multiple patients and triage", q: ["multiple patients", "mass casualty", "triage", "many injured in crash", "how to triage", "several patients at scene", "more than one patient"],
+    a: [
+      "Request more units early and set up a staging area.",
+      "Triage quickly: immediate (red), delayed (yellow), minor (green), and deceased or expectant (black).",
+      "Treat life threats first: airway, major bleeding, and breathing.",
+      "Label patients or assign a triage officer so no one is missed.",
+      "Give each receiving hospital a count and status over radio."
+    ] },
+
+  // ================= ASSESSMENT =================
+  { cat: "Assessment", title: "Scene safety and size-up", q: ["scene safety", "size up", "arriving on scene what first", "is the scene safe", "first thing on scene", "scene size up"],
+    a: [
+      "Before approaching, check for fire, smoke, gas, downed power lines, traffic, weapons, and unstable structures.",
+      "Count the patients and estimate the mechanism of injury or nature of illness.",
+      "Decide whether you need police, fire, or more ambulances.",
+      "Do not enter an unsafe scene. Wait for law enforcement to clear it when required."
+    ] },
+
+  { cat: "Assessment", title: "Primary assessment (ABCDE)", q: ["primary assessment", "abcde", "how to assess patient", "first steps with patient", "what to check first", "airway breathing circulation", "primary survey"],
+    a: [
+      "A, Airway: check for obstruction and open it. Use a jaw thrust if spinal injury is possible. Insert an airway adjunct if appropriate.",
+      "B, Breathing: check rate, depth, effort, and chest movement. Listen to the lungs. Assist with a BVM if breathing is inadequate.",
+      "C, Circulation: check pulse, skin colour and temperature, and capillary refill. Control major bleeding first.",
+      "D, Disability: check level of consciousness with AVPU or GCS, and check pupils and blood glucose if relevant.",
+      "E, Expose and environment: expose enough to find injuries, and keep the patient warm and dignified."
+    ] },
+
+  { cat: "Assessment", title: "Secondary assessment (head to toe)", q: ["secondary assessment", "head to toe exam", "full body check", "detailed exam", "examine the patient"],
+    a: [
+      "Examine the head, face, neck, chest, abdomen, pelvis, arms, legs, and back.",
+      "Look for deformity, tenderness, swelling, wounds, bruising, and rashes.",
+      "Check neurological function and circulation in the limbs.",
+      "Take a full set of vitals and repeat them regularly."
+    ] },
+
+  { cat: "Assessment", title: "SAMPLE history", q: ["sample history", "patient history", "what questions to ask patient", "medical history questions", "allergies and medications"],
+    a: [
+      "S: Signs and symptoms.",
+      "A: Allergies.",
+      "M: Medications, including prescriptions and recreational drugs.",
+      "P: Past medical history.",
+      "L: Last oral intake, such as food or drink.",
+      "E: Events leading up to the call."
+    ] },
+
+  { cat: "Assessment", title: "OPQRST pain assessment", q: ["opqrst", "how to ask about pain", "pain assessment", "describe your pain", "pain scale"],
+    a: [
+      "O: Onset. When did it start, and what were you doing?",
+      "P: Provocation or palliation. What makes it better or worse?",
+      "Q: Quality. Sharp, dull, crushing, burning?",
+      "R: Region and radiation. Where is it, and does it spread?",
+      "S: Severity from 0 to 10.",
+      "T: Time. How long has it lasted, and is it constant?"
+    ] },
+
+  { cat: "Assessment", title: "Normal vital signs", q: ["normal vitals", "vital signs ranges", "normal heart rate", "normal blood pressure", "normal oxygen level", "spo2 normal", "normal breathing rate", "what counts as normal"],
+    a: [
+      "Heart rate: about 60 to 100 beats per minute. Below 60 is bradycardia, above 100 is tachycardia.",
+      "Respiratory rate: about 12 to 20 breaths per minute. Note depth and effort as well.",
+      "Blood pressure: roughly 90/60 to 120/80 mmHg. Low values can suggest shock.",
+      "SpO2: usually 95 to 100 percent. Lower values suggest low oxygen.",
+      "Temperature: about 36.5 to 37.5 °C.",
+      "Take vitals at the start, after treatment, and before transport."
+    ] },
+
+  { cat: "Assessment", title: "Paediatric vital signs", q: ["child vitals", "baby heart rate", "normal child heart rate", "infant breathing rate", "children normal vitals", "pediatric vitals"],
+    a: [
+      "Heart rate and breathing rate are higher in children and vary with age. Use your protocol's age tables.",
+      "Infants typically breathe about 30 to 60 times per minute, and children about 20 to 30.",
+      "Check the work of breathing: nasal flaring, retractions, and grunting are warning signs.",
+      "Children can compensate for a long time, so watch for sudden deterioration."
+    ] },
+
+  { cat: "Assessment", title: "Glasgow Coma Scale (GCS)", q: ["gcs", "glasgow coma scale", "how to score consciousness", "level of consciousness", "how to check if patient is conscious", "gcs score meaning"],
+    a: [
+      "The GCS adds three scores for a total from 3 to 15.",
+      "Eyes: 4 spontaneous, 3 to voice, 2 to pain, 1 none.",
+      "Verbal: 5 oriented, 4 confused, 3 inappropriate words, 2 sounds only, 1 none.",
+      "Motor: 6 obeys commands, 5 localises pain, 4 withdraws from pain, 3 abnormal flexion, 2 extension, 1 none.",
+      "A total of 8 or lower is generally treated as a severe head injury and needs airway attention."
+    ] },
+
+  { cat: "Assessment", title: "AVPU", q: ["avpu", "quick consciousness check", "alert voice pain unresponsive", "is patient responsive"],
+    a: [
+      "A: Alert and oriented.",
+      "V: Responds to Voice.",
+      "P: Responds only to Pain.",
+      "U: Unresponsive.",
+      "AVPU is a quick alternative to the GCS when time is short."
+    ] },
+
+  { cat: "Assessment", title: "Pupil checks", q: ["pupils", "pupil size", "unequal pupils", "pupils not reacting", "pupil check", "dilated pupils"],
+    a: [
+      "Check size, shape, and whether the pupils are equal.",
+      "Shine a light into each eye and check the response: both should constrict briskly.",
+      "Unequal or fixed, dilated pupils can signal a serious head injury or brain problem.",
+      "Record what you see at each reassessment."
+    ] },
+
+  { cat: "Assessment", title: "Blood glucose check", q: ["check blood sugar", "glucometer", "blood glucose test", "when to check glucose", "finger prick test"],
+    a: [
+      "Check glucose whenever a patient has altered mental status, seizures, weakness, or a known diabetes history.",
+      "Clean the finger, prick it, and apply the blood to the strip as your device requires.",
+      "Record the reading with the time.",
+      "Treat or transport according to the result and protocol."
+    ] },
+
+  { cat: "Assessment", title: "Pain score and reassessment", q: ["pain score", "reassess patient", "how often to check", "after treatment check", "patient got better or worse"],
+    a: [
+      "Reassess after every intervention and every few minutes for unstable patients.",
+      "Ask the patient to rate pain from 0 to 10 before and after treatment.",
+      "Compare vitals, mental status, and any changes in the complaint.",
+      "Document each reassessment with the time."
+    ] },
+
+  // ================= PROCEDURES =================
+  { cat: "Procedures", title: "CPR (adult)", q: ["how to do cpr", "chest compressions", "cpr steps", "compressions and breaths", "hands only cpr", "compression rate"],
+    a: [
+      "Place the heel of one hand on the centre of the chest and the other hand on top.",
+      "Push hard and fast, at about 100 to 120 compressions per minute, to a depth of about 5 to 6 cm for adults.",
+      "Let the chest recoil fully between compressions.",
+      "Give rescue breaths according to your protocol, such as 30 compressions to 2 breaths.",
+      "Swap compressors every two minutes or sooner if tired, and minimise pauses."
+    ] },
+
+  { cat: "Procedures", title: "Recovery position", q: ["recovery position", "unconscious but breathing", "how to place patient on side", "side position", "patient breathing unconscious"],
+    a: [
+      "Kneel beside the patient and straighten their legs.",
+      "Place the arm nearest you at a right angle with the palm up.",
+      "Bring the far arm across the chest and hold the back of the hand against the cheek.",
+      "Bend the far knee and roll the patient toward you onto their side.",
+      "Tilt the head back slightly so the airway stays open, and check breathing regularly."
+    ] },
+
+  { cat: "Procedures", title: "Airway: head tilt, jaw thrust", q: ["open airway", "head tilt chin lift", "jaw thrust", "clear airway", "airway blocked by tongue", "how to open airway"],
+    a: [
+      "Head tilt, chin lift: tilt the head back and lift the chin. Use this if there is no spinal injury.",
+      "Jaw thrust: place fingers behind the angle of the jaw and lift it forward without moving the head. Use this if spinal injury is possible.",
+      "Clear visible obstructions with a suction device or by turning the patient, following protocol.",
+      "Insert an oral or nasal airway if the patient allows it and it is in your protocol."
+    ] },
+
+  { cat: "Procedures", title: "BVM (bag-valve-mask) ventilation", q: ["how to use bvm", "bag valve mask use", "ventilate patient", "breathing for patient", "assisted breathing", "squeeze bag"],
+    a: [
+      "Seal the mask on the face with both hands, using a two-person technique if you can.",
+      "Squeeze the bag steadily and watch the chest rise.",
+      "Give each breath over about one second, and avoid squeezing too hard or fast, which can inflate the stomach.",
+      "Watch the patient's colour and SpO2, and adjust the seal if the chest does not rise."
+    ] },
+
+  { cat: "Procedures", title: "Oxygen delivery", q: ["oxygen", "give oxygen", "nasal cannula", "non rebreather", "oxygen mask", "how much oxygen"],
+    a: [
+      "Nasal cannula: low-flow oxygen for patients who are breathing adequately.",
+      "Non-rebreather mask: high-flow oxygen for patients who need more support, with the reservoir bag inflated.",
+      "Give oxygen according to your protocol and SpO2 readings, and watch for improvement.",
+      "Turn oxygen off or reduce flow when no longer needed."
+    ] },
+
+  { cat: "Procedures", title: "Tourniquet application", q: ["tourniquet", "how to apply tourniquet", "tourniquet on arm", "tourniquet on leg", "stop limb bleeding"],
+    a: [
+      "Place the tourniquet about 5 to 7 cm above the wound, on the limb, not over a joint.",
+      "Tighten until bleeding stops, following the manufacturer and protocol.",
+      "Secure the tourniquet and note the time it was applied.",
+      "Do not loosen it unless your protocol says so. Hand over the time to the receiving team."
+    ] },
+
+  { cat: "Procedures", title: "Pressure dressing", q: ["pressure dressing", "bandage bleeding", "wrap wound", "hemostatic gauze", "pack wound"],
+    a: [
+      "Place a sterile dressing directly on the wound.",
+      "Apply firm pressure and wrap a bandage over it to hold it in place.",
+      "Check the limb below the dressing for circulation after wrapping.",
+      "Add more layers rather than removing the first dressing if blood soaks through."
+    ] },
+
+  { cat: "Procedures", title: "Splinting", q: ["how to splint", "splint arm", "splint leg", "immobilise limb", "fracture splint"],
+    a: [
+      "Check circulation, sensation, and movement before and after splinting.",
+      "Splint the joints above and below the injury.",
+      "Pad the splint, keep the limb in the position found, and secure with bandages.",
+      "Recheck circulation and tell the patient to report numbness, tingling, or increased pain."
+    ] },
+
+  { cat: "Procedures", title: "Spinal immobilisation", q: ["spinal board", "immobilise spine", "log roll", "move patient with neck injury", "collar and board"],
+    a: [
+      "Hold the head and neck still with manual stabilisation.",
+      "Apply a cervical collar sized to the patient.",
+      "Roll the patient as a single unit using a log roll if they must be turned.",
+      "Secure the patient to a board or scoop stretcher and pad the gaps around the head."
+    ] },
+
+  { cat: "Procedures", title: "Chest seal and decompression", q: ["chest seal", "needle decompression", "decompress chest", "sucking chest wound", "tension pneumothorax treatment"],
+    a: [
+      "For an open chest wound, apply a vented chest seal over the wound, following protocol.",
+      "For suspected tension pneumothorax, follow your protocol for needle decompression at the chest site listed in your guidelines.",
+      "Reassess breathing, breath sounds, and vitals after the procedure.",
+      "Report the intervention immediately."
+    ] },
+
+  { cat: "Procedures", title: "IV access (general)", q: ["iv access", "start iv", "put in iv", "intravenous line", "iv line", "cannula"],
+    a: [
+      "Choose a suitable vein and clean the site.",
+      "Insert the catheter and secure it with a dressing.",
+      "Flush the line and check it is working before giving any fluid or medication.",
+      "Document the site, gauge, and time, and monitor for complications."
+    ] },
+
+  { cat: "Procedures", title: "AED use", q: ["how to use aed", "aed steps", "attach aed", "defibrillate patient", "using defib", "shock the patient"],
+    a: [
+      "Turn the AED on and follow voice prompts.",
+      "Attach the pads to the chest as the diagram shows, with the patient's skin dry.",
+      "Make sure no one is touching the patient, then let the device analyse the rhythm.",
+      "If a shock is advised, make sure everyone is clear and press the shock button.",
+      "Resume CPR immediately after the shock."
+    ] },
+
+  { cat: "Procedures", title: "Moving patients safely", q: ["move patient", "lift patient", "carry patient", "stair chair", "transfer to stretcher", "safe lifting"],
+    a: [
+      "Plan the move and assign roles. Use a stair chair on stairs and a stretcher on flat ground.",
+      "Lift with your legs, keep the load close, and communicate clearly.",
+      "Keep the spine in line if there is any possibility of spinal injury.",
+      "Secure the patient before moving and keep them covered and warm."
+    ] },
+
+  // ================= EQUIPMENT =================
+  { cat: "Equipment", title: "Cardiac monitor", q: ["cardiac monitor", "heart monitor", "monitor leads", "ecg monitor", "rhythm strip"],
+    a: "A monitor shows the heart rhythm, heart rate, and often SpO2 and blood pressure. Attach the leads to the chest as shown on the device, and check the rhythm strip regularly. Watch for artifacts from movement." },
+
+  { cat: "Equipment", title: "AED", q: ["aed device", "defibrillator device", "what is aed", "automated external defibrillator"],
+    a: "An Automated External Defibrillator analyses the heart rhythm and advises a shock only for shockable rhythms. It guides you with voice prompts and is used during cardiac arrest." },
+
+  { cat: "Equipment", title: "BVM", q: ["bvm device", "bag valve mask", "ambu bag", "assisted breathing device"],
+    a: "A handheld bag and mask used to push air into the lungs of a patient who is not breathing well. Use with oxygen when available." },
+
+  { cat: "Equipment", title: "Oxygen tank and masks", q: ["oxygen tank", "oxygen bottle", "nasal cannula device", "oxygen mask device", "non rebreather device"],
+    a: "Oxygen tanks come with regulators. Nasal cannulas deliver low flow. Non-rebreather masks deliver high flow and need a reservoir bag. Check the tank pressure before use." },
+
+  { cat: "Equipment", title: "Pulse oximeter", q: ["pulse oximeter", "spo2 device", "finger clip", "oxygen reading device"],
+    a: "A clip placed on a finger or ear that estimates oxygen saturation (SpO2) and pulse rate. Poor circulation, cold hands, or nail polish can affect the reading." },
+
+  { cat: "Equipment", title: "Glucometer", q: ["glucometer device", "blood sugar meter", "glucose meter", "glucose test kit"],
+    a: "A small device that measures blood glucose from a drop of blood on a test strip. Use the strips and lancets for that device only, and record the reading." },
+
+  { cat: "Equipment", title: "Stretchers and stair chairs", q: ["stretcher", "stair chair", "scoop stretcher", "spine board", "backboard"],
+    a: "A stretcher moves patients on flat ground. A stair chair is for narrow stairs and needs at least two crew. A scoop stretcher is used for spinal immobilisation. Spine boards are used with a collar and straps." },
+
+  { cat: "Equipment", title: "Trauma kit", q: ["trauma kit", "bleeding kit", "tourniquet kit", "trauma supplies", "what to carry bleeding"],
+    a: "A trauma kit typically includes tourniquets, pressure dressings, hemostatic gauze, chest seals, trauma shears, gloves, and a mylar blanket." },
+
+  { cat: "Equipment", title: "Cervical collar and splints", q: ["cervical collar device", "neck collar", "splint types", "traction splint", "vacuum splint"],
+    a: "Cervical collars immobilise the neck and come in sizes. Splints include padded splints, vacuum splints, and traction splints for femur fractures. Choose by injury and protocol." },
+
+  // ================= TERMS =================
+  { cat: "Terms", title: "ALS and BLS", q: ["als", "bls", "advanced life support", "basic life support", "what is als", "what is bls"],
+    a: "ALS (Advanced Life Support) includes advanced airways, IV access, and cardiac medications, provided by paramedics. BLS (Basic Life Support) includes CPR, bleeding control, and oxygen, provided by EMTs and first responders." },
+
+  { cat: "Terms", title: "Airway", q: ["airway", "what is airway", "airway obstruction", "blocked airway"],
+    a: "The passage that carries air from the nose and mouth to the lungs. Opening and keeping it clear is always the first priority." },
+
+  { cat: "Terms", title: "Anaphylaxis", q: ["anaphylaxis meaning", "what is anaphylaxis", "severe allergy"],
+    a: "A severe, rapid allergic reaction that can close the airway and drop blood pressure. It is treated with epinephrine." },
+
+  { cat: "Terms", title: "Arrhythmia", q: ["arrhythmia", "irregular heartbeat", "heart rhythm problem", "afib", "atrial fibrillation", "ventricular tachycardia"],
+    a: "An irregular heart rhythm. Atrial fibrillation is an irregularly irregular rhythm. Ventricular tachycardia is a fast, dangerous rhythm that can need urgent treatment." },
+
+  { cat: "Terms", title: "Asystole", q: ["asystole", "flatline", "flat line on monitor", "non shockable rhythm"],
+    a: "A flatline on the monitor and a non-shockable rhythm. Continue CPR and follow protocol." },
+
+  { cat: "Terms", title: "Shockable and non-shockable rhythms", q: ["shockable rhythm", "vfib", "ventricular fibrillation", "pulseless electrical activity", "pea", "pulseless vt"],
+    a: "Shockable rhythms include ventricular fibrillation and pulseless ventricular tachycardia. Non-shockable rhythms include asystole and pulseless electrical activity (PEA). Follow your protocol for each, and always continue CPR." },
+
+  { cat: "Terms", title: "Bradycardia and tachycardia", q: ["bradycardia", "tachycardia", "fast heart rate", "slow heart rate", "heart rate too high", "heart rate too low"],
+    a: "Bradycardia is a heart rate below 60 beats per minute. Tachycardia is above 100. Either matters when it comes with low blood pressure, chest pain, confusion, or shock." },
+
+  { cat: "Terms", title: "Hypoxia", q: ["hypoxia", "low oxygen", "oxygen level low", "hypoxic", "not enough oxygen"],
+    a: "Low oxygen levels in the body. Signs include cyanosis, confusion, restlessness, and a low SpO2 reading. Treat the cause and give oxygen." },
+
+  { cat: "Terms", title: "Hypercapnia", q: ["hypercapnia", "high co2", "carbon dioxide high", "co2 retention"],
+    a: "Too much carbon dioxide in the blood, often from poor breathing or lung disease. Signs include drowsiness, confusion, and headache." },
+
+  { cat: "Terms", title: "Shock", q: ["shock", "what is shock", "signs of shock", "patient in shock", "shock symptoms", "hypovolemic shock", "septic shock"],
+    a: "Shock means the body is not getting enough blood flow to its organs. Signs include pale or cool skin, a fast weak pulse, low blood pressure, rapid breathing, and confusion. Control the cause, keep the patient warm, and transport." },
+
+  { cat: "Terms", title: "Hypotension and hypertension", q: ["low blood pressure", "high blood pressure", "hypotension", "hypertension", "blood pressure too high"],
+    a: "Hypotension is low blood pressure, which can indicate shock. Hypertension is high blood pressure, which can be dangerous if it is extremely high or comes with symptoms like chest pain, headache, or confusion." },
+
+  { cat: "Terms", title: "Hemothorax", q: ["hemothorax", "blood in chest", "blood around lung", "blood in chest cavity"],
+    a: "Blood collecting between the lung and the chest wall, usually after trauma. Signs include reduced breath sounds on one side and signs of shock. It needs rapid transport." },
+
+  { cat: "Terms", title: "Pneumothorax", q: ["pneumothorax", "lung collapsed", "air in chest", "collapsed lung"],
+    a: "Air trapped between the lung and the chest wall, causing the lung to collapse. A tension pneumothorax traps air under pressure and needs immediate decompression under protocol." },
+
+  { cat: "Terms", title: "Myocardial infarction (heart attack)", q: ["myocardial infarction", "mi", "heart attack meaning", "blocked artery heart"],
+    a: "Blockage of blood flow to part of the heart muscle. A STEMI is a type that shows specific changes on an ECG and needs urgent treatment." },
+
+  { cat: "Terms", title: "Stroke (CVA)", q: ["cva", "stroke meaning", "brain attack", "ischemic stroke", "hemorrhagic stroke"],
+    a: "Loss of blood flow to part of the brain. An ischaemic stroke comes from a blockage. A haemorrhagic stroke comes from bleeding in the brain. Both need rapid transport to a suitable hospital." },
+
+  { cat: "Terms", title: "Syncope (fainting)", q: ["syncope meaning", "fainting meaning", "what is syncope"],
+    a: "A brief loss of consciousness from a temporary drop in blood flow to the brain. It can be harmless or a sign of a serious cause." },
+
+  { cat: "Terms", title: "Hyperglycemia and hypoglycemia", q: ["hyperglycemia", "hypoglycemia", "high sugar meaning", "low sugar meaning"],
+    a: "Hyperglycemia is high blood glucose. Hypoglycemia is low blood glucose. Both can cause confusion and need quick assessment and treatment." },
+
+  { cat: "Terms", title: "Cyanosis", q: ["cyanosis", "blue lips", "blue fingers", "bluish skin"],
+    a: "A bluish tint to the lips, fingers, or skin, a sign of low oxygen. It needs urgent oxygen and assessment." },
+
+  { cat: "Terms", title: "Diaphoresis and pallor", q: ["diaphoresis", "sweaty", "pale skin", "pallor", "clammy skin", "cold sweat"],
+    a: "Diaphoresis is heavy sweating, often linked to shock or heart problems. Pallor is pale skin, often linked to blood loss or poor circulation." },
+
+  { cat: "Terms", title: "Capillary refill", q: ["capillary refill", "check capillary refill", "refill time", "press nail white"],
+    a: "Press a fingernail until it turns white and count how long it takes to return to pink. Under about 2 seconds is usually normal. Longer times can suggest poor circulation or shock." },
+
+  { cat: "Terms", title: "Jugular venous distension (JVD)", q: ["jvd", "neck veins swollen", "jugular vein distension", "distended neck veins"],
+    a: "Neck veins that are visibly swollen. It can be a sign of heart failure or a tension pneumothorax." },
+
+  { cat: "Terms", title: "Tracheal deviation", q: ["tracheal deviation", "trachea shifted", "windpipe pushed to one side"],
+    a: "The trachea (windpipe) is pushed away from the midline. It is a late sign of tension pneumothorax and needs immediate action." },
+
+  { cat: "Terms", title: "Crepitus", q: ["crepitus", "crackling under skin", "subcutaneous emphysema", "crunchy feeling skin"],
+    a: "A crackling or grating feeling under the skin, often caused by air leaking into tissue. It can follow chest injury." },
+
+  { cat: "Terms", title: "ECG and 12-lead", q: ["ecg", "12 lead", "electrocardiogram", "heart tracing"],
+    a: "An electrocardiogram records the heart's electrical activity. A 12-lead ECG uses 12 views to spot heart attacks and other problems. Take it when your equipment and protocol allow." },
+
+  { cat: "Terms", title: "Sepsis", q: ["sepsis meaning", "what is sepsis", "septic"],
+    a: "The body's extreme response to infection, which can cause organ failure and shock. It needs prompt recognition and transport." },
+
+  { cat: "Terms", title: "Dehydration", q: ["dehydration", "dehydrated", "dry mouth", "sunken eyes", "not drinking"],
+    a: "Loss of body water and salts. Signs include dry mouth, low urine output, dizziness, and a fast heart rate. Severe dehydration can cause shock." },
+
+  { cat: "Terms", title: "Mechanism of injury (MOI)", q: ["mechanism of injury", "moi", "how it happened", "what caused the injury", "mechanism"],
+    a: "How the injury happened, such as a fall from height, a car crash, or a gunshot. The mechanism helps predict hidden injuries, so always ask." },
+
+  { cat: "Terms", title: "Triage categories", q: ["triage colours", "red yellow green black", "triage tags", "immediate delayed minor"],
+    a: "Immediate (red): life-threatening, needs immediate care. Delayed (yellow): serious but stable. Minor (green): walking wounded. Deceased or expectant (black): unlikely to survive given available resources." },
+
+  // ================= DOCUMENTATION =================
+  { cat: "Documentation", title: "Patient care report (PCR)", q: ["patient care report", "pcr", "write report", "documentation", "what to write", "how to document"],
+    a: [
+      "Record the time of call, arrival, and contact.",
+      "Record the chief complaint, history (SAMPLE), and assessment findings.",
+      "Record vitals with times, and reassessments.",
+      "Record every intervention, medication, and response, with times.",
+      "Record the destination hospital, handoff time, and the receiving staff member."
+    ] },
+
+  { cat: "Documentation", title: "Radio handoff (MIST)", q: ["radio report", "mist report", "how to report to hospital", "handoff", "what to say on radio", "how to give report", "patient handover"],
+    a: [
+      "M: Mechanism of injury or illness.",
+      "I: Injuries or problems found.",
+      "S: Signs and vitals.",
+      "T: Treatment given.",
+      "Include the patient's age, sex, chief complaint, and any urgent needs. Keep it short and confirm the destination."
+    ] },
+
+  { cat: "Documentation", title: "SBAR handoff", q: ["sbar", "sbar handoff", "hospital handover format", "structured handover"],
+    a: [
+      "S: Situation. Who you are, the patient, and the main problem.",
+      "B: Background. Medical history, medications, and allergies.",
+      "A: Assessment. Vitals, findings, and what you think is wrong.",
+      "R: Recommendation. What you have done and what you need from the team."
+    ] },
+
+  { cat: "Documentation", title: "Refusal of treatment", q: ["patient refuses treatment", "refuse to go to hospital", "declines transport", "against medical advice", "refusal form"],
+    a: [
+      "Make sure the patient has capacity, meaning they understand the risks and can make the decision.",
+      "Explain the risks clearly and offer alternatives such as transport or follow-up.",
+      "Document the refusal, the risks explained, the patient's words, and the witnesses present.",
+      "Follow your server's rules for refusals and involve a supervisor if needed."
+    ] },
+
+  { cat: "Documentation", title: "Consent", q: ["consent", "can i treat patient", "patient consent", "unconscious consent", "implied consent"],
+    a: [
+      "Ask the patient for consent before treatment, and explain what you are doing.",
+      "If the patient cannot consent, treat under implied consent for emergencies, according to your protocol.",
+      "Record that consent was obtained or that the patient could not give it."
+    ] },
+
+  { cat: "Documentation", title: "Time stamps", q: ["time stamp", "what times to record", "record times", "times for report"],
+    a: "Record times for call received, dispatched, en route, on scene, patient contact, departure, arrival at hospital, and handoff. Times matter for treatments like tourniquets and stroke care."
+  }
+];
+
+/* ============ MATCHING ENGINE ============ */
+const SYN = [
+  [/\bstop(ped|s|ping)? breathing\b/g, "not breathing"],
+  [/\bno breath\b/g, "not breathing"],
+  [/\bcan ?not breathe\b|\bcant breathe\b|\bcant breath\b|\bhard to breathe\b|\bdifficulty breathing\b/g, "short breath"],
+  [/\bbreathe\b/g, "breath"],
+  [/\bheart attack\b|\bchest hurts?\b|\bchest pressure\b|\bchest tight\w*/g, "chest pain"],
+  [/\bpassed out\b|\bblack(ed)? out\b|\bblackout\b|\bdizzy\b/g, "faint"],
+  [/\bfits?\b|\bconvuls\w*/g, "seizure"],
+  [/\bblood sugar\b|\bsugar\b|\bdiabetes\b/g, "diabetic"],
+  [/\bcut\b|\bstab\w*|\bshot\b|\bgunshot\b|\bblood loss\b|\bgushing\b|\bhemorrhag\w*|\bhaemorrhag\w*/g, "bleed"],
+  [/\bbroke\w*|\bbroken\b|\bsnapped\b/g, "fracture"],
+  [/\bdroop\w*|\bslurr\w*/g, "stroke"],
+  [/\ballerg\w*|\bhives?\b|\bepipen\b|\bepinephrine\b/g, "allergic"],
+  [/\bburnt\b/g, "burn"],
+  [/\bwheez\w*/g, "wheez"],
+  [/\bpoison\w*|\bod\b|\btoo many pills\b/g, "overdose"],
+  [/\bchoke\w*/g, "choking"],
+  [/\bcrushed\b/g, "crush"],
+  [/\belectrocut\w*|\belectric shock\b/g, "electrical injury"],
+  [/\bsugar is low\b/g, "low blood sugar"]
+];
+
+const STOP = new Set(["a","an","the","is","to","do","i","my","what","how","should","if","in","of","for","on","at","it","this","with","and","or","be","me","am","we","you","our","its","that","there","when","does","can","get","so","up","just","about","tell","which","where","who","his","her","their","they","he","she","was","are"]);
+
+function norm(s) {
+  let t = s.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  for (const [re, rep] of SYN) t = t.replace(re, rep);
+  return t;
+}
+
+function stem(t) {
+  if (t.length > 5 && t.endsWith("ing")) return t.slice(0, -3);
+  if (t.length > 4 && t.endsWith("ed")) return t.slice(0, -2);
+  if (t.length > 3 && t.endsWith("s") && !t.endsWith("ss")) return t.slice(0, -1);
+  return t;
+}
+
+function toks(s) {
+  return norm(s).split(" ").filter(t => t && !STOP.has(t)).map(stem);
+}
+
+function lev(a, b) {
+  const m = a.length, n = b.length;
+  if (!m) return n;
+  if (!n) return m;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const cur = [i];
+    for (let j = 1; j <= n; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+
+function tokSim(a, b) {
+  if (a === b) return 1;
+  const L = Math.min(a.length, b.length);
+  const d = lev(a, b);
+  if (L >= 8 && d <= 2) return 0.75;
+  if (L >= 6 && d <= 1) return 0.8;
+  return 0;
+}
+
+function sim(qt, pt) {
+  if (!qt.length || !pt.length) return 0;
+  let a = 0;
+  for (const x of qt) {
+    let best = 0;
+    for (const y of pt) { const s = tokSim(x, y); if (s > best) best = s; if (best === 1) break; }
+    a += best;
+  }
+  let b = 0;
+  for (const y of pt) {
+    let best = 0;
+    for (const x of qt) { const s = tokSim(x, y); if (s > best) best = s; if (best === 1) break; }
+    b += best;
+  }
+  return (a / qt.length + b / pt.length) / 2;
+}
+
+function scoreEntry(query, entry) {
+  const qt = toks(query);
+  const nq = " " + norm(query) + " ";
+  let best = 0, matched = null;
+  for (const phrase of [entry.title, ...entry.q]) {
+    const np = norm(phrase);
+    let s = sim(qt, toks(phrase));
+    if (np && nq.includes(" " + np + " ")) s = Math.max(s, 1);
+    if (s > best) { best = s; matched = phrase; }
+  }
+  return { score: best, matched };
+}
+
+function search(query) {
+  if (!query.trim()) return [];
+  return DB.map(e => ({ e, ...scoreEntry(query, e) }))
+           .filter(r => r.score >= 0.35)
+           .sort((a, b) => b.score - a.score);
+}
+
+/* ============ UI ============ */
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const $ = sel => document.querySelector(sel);
+let activeCat = "All";
+
+function body(a) {
+  if (Array.isArray(a)) return `<ol>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ol>`;
+  return `<p>${esc(a)}</p>`;
+}
+
+function entryCard(e, matched) {
+  return `<article class="card">
+    <span class="tag">${esc(e.cat)}</span>
+    <h2>${esc(e.title)}</h2>
+    ${body(e.a)}
+    ${matched ? `<p class="muted">Matched: &ldquo;${esc(matched)}&rdquo;</p>` : ""}
+  </article>`;
+}
+
+function renderResults(query) {
+  const out = $("#results");
+  $("#browse").classList.toggle("hidden", !!query.trim());
+  if (!query.trim()) { out.innerHTML = `<div class="empty">Type something above, or pick a topic below.</div>`; return; }
+  const found = search(query);
+  if (!found.length) {
+    out.innerHTML = `<div class="empty">Nothing matched &ldquo;${esc(query)}&rdquo;. Try other words or pick a topic.</div>`;
+    return;
+  }
+  const [top, ...rest] = found;
+  let html = entryCard(top.e, top.matched);
+  const related = rest.slice(0, 5);
+  if (related.length) {
+    html += `<div class="section-label">Also check</div><div class="related">` +
+      related.map(r => `<button class="pill" data-open="${DB.indexOf(r.e)}">${esc(r.e.title)}</button>`).join("") +
+      `</div>`;
+  }
+  out.innerHTML = html;
+}
+
+function renderFilters() {
+  const cats = ["All", ...new Set(DB.map(e => e.cat))];
+  $("#filters").innerHTML = cats.map(c =>
+    `<button class="pill" data-cat="${esc(c)}" aria-pressed="${c === activeCat}">${esc(c)}</button>`).join("");
+}
+
+function renderBrowse() {
+  const list = DB.map((e, i) => ({ e, i })).filter(x => activeCat === "All" || x.e.cat === activeCat);
+  $("#browse").innerHTML = `<div class="section-label">${activeCat === "All" ? "All topics" : esc(activeCat)} (${list.length})</div>` +
+    list.map(({ e, i }) => `<div class="topic-row">
+      <button data-open="${i}">${esc(e.title)}</button>
+      <span class="muted">${esc(e.cat)}</span></div>`).join("");
+}
+
+document.addEventListener("click", e => {
+  const cat = e.target.closest("[data-cat]");
+  if (cat) {
+    activeCat = cat.dataset.cat;
+    renderFilters();
+    renderBrowse();
+    return;
+  }
+  const open = e.target.closest("[data-open]");
+  if (open) {
+    const entry = DB[Number(open.dataset.open)];
+    $("#search").value = "";
+    $("#results").innerHTML = entryCard(entry, null);
+    $("#browse").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+$("#search").addEventListener("input", e => renderResults(e.target.value));
+
+renderFilters();
+renderBrowse();
+renderResults("");
+
+/* ============ GUIDED HELP: "not sure how to describe it" ============ */
+const WHERE_OPTS = [
+  ["Head or face", "head face"],
+  ["Chest", "chest"],
+  ["Stomach or belly", "stomach belly"],
+  ["Arm or hand", "arm hand"],
+  ["Leg or foot", "leg foot"],
+  ["Back or neck", "back neck"],
+  ["Whole body or not sure", ""]
+];
+const WHAT_OPTS = [
+  ["Trouble breathing", "not breathing short breath"],
+  ["Bleeding or a wound", "bleeding wound"],
+  ["Not responding or unconscious", "unconscious not responding"],
+  ["Pain", "pain"],
+  ["Burn", "burn"],
+  ["Broken or bent limb", "broken bone fracture"],
+  ["Fell or got hit", "fell hit injury"],
+  ["Shaking or fitting", "seizure fitting"],
+  ["Swelling, itching, or rash", "allergic swelling hives"],
+  ["Dizzy or fainted", "fainted dizzy"],
+  ["Sick or vomiting", "sick vomiting"],
+  ["Something else", ""]
+];
+
+let guideWhere = null;
+
+function guideShowWhere() {
+  guideWhere = null;
+  $("#guide").classList.remove("hidden");
+  $("#guide").innerHTML = `
+    <h2>Where is the problem?</h2>
+    <p class="hint">Pick the closest one. You can change it later.</p>
+    <div class="opts">${WHERE_OPTS.map((o, i) => `<button class="opt" data-where="${i}">${esc(o[0])}</button>`).join("")}</div>`;
+}
+
+function guideShowWhat(wi) {
+  guideWhere = WHERE_OPTS[wi];
+  $("#guide").innerHTML = `
+    <h2>What is happening?</h2>
+    <p class="hint">Location: ${esc(guideWhere[0])}</p>
+    <div class="opts">${WHAT_OPTS.map((o, i) => `<button class="opt" data-what="${i}">${esc(o[0])}</button>`).join("")}</div>
+    <button class="back-link" data-restart="1">&larr; Start over</button>`;
+}
+
+function guideShowResults(wi, xi) {
+  const what = WHAT_OPTS[xi];
+  const q = (WHERE_OPTS[wi][1] + " " + what[1]).trim() || what[0];
+  const found = search(q);
+  let html = `<h2>Results</h2><p class="hint">${esc(WHERE_OPTS[wi][0])} &middot; ${esc(what[0])}</p>`;
+  if (!found.length) {
+    html += `<p class="hint">Nothing matched that exactly. Try the search bar with a different word, or browse the topics below.</p>`;
+  } else {
+    const [top, ...rest] = found;
+    html += `<article class="card" style="margin:10px 0 0">
+      <span class="tag">${esc(top.e.cat)}</span>
+      <h2>${esc(top.e.title)}</h2>
+      ${Array.isArray(top.e.a) ? `<ol>${top.e.a.map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : `<p>${esc(top.e.a)}</p>`}
+    </article>`;
+    if (rest.length) {
+      html += `<div class="opts">${rest.slice(0, 5).map(r => `<button class="opt" data-open="${DB.indexOf(r.e)}">${esc(r.e.title)}</button>`).join("")}</div>`;
+    }
+  }
+  html += `<button class="back-link" data-restart="1">&larr; Start over</button>`;
+  $("#guide").innerHTML = html;
+}
+
+document.getElementById("guide-open").addEventListener("click", () => {
+  if (!$("#guide").classList.contains("hidden")) { $("#guide").classList.add("hidden"); return; }
+  guideShowWhere();
+});
+
+$("#guide").addEventListener("click", e => {
+  const w = e.target.closest("[data-where]");
+  if (w) { guideShowWhat(Number(w.dataset.where)); return; }
+  const x = e.target.closest("[data-what]");
+  if (x && guideWhere) { guideShowResults(WHERE_OPTS.indexOf(guideWhere), Number(x.dataset.what)); return; }
+  if (e.target.closest("[data-restart]")) { guideShowWhere(); }
+});
+</script>
+</body>
+</html>
